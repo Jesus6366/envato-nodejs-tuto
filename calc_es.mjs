@@ -6,20 +6,23 @@ const rl = readline.createInterface({
   output: output,
 });
 
-function question() {
-  rl.question("Enter your simple equation: ", (input) => {
-    if (input === "quit") {
-      rl.close();
-    } else {
-      try {
-        const value = eval(input);
-        console.log(`${value}`);
-      } catch (exception) {
-        console.log("I dont know how to do that");
-      }
-      question();
-    }
+function question(query) {
+  return new Promise((resolve) => {
+    rl.question(query, resolve);
   });
 }
 
-question();
+let answer = await question("Enter your simple equation: ");
+
+while (answer != "quit") {
+  try {
+    const value = eval(answer);
+    console.log(`${value}`);
+  } catch (exception) {
+    console.log("I dont know how to do that");
+  }
+
+  answer = await question("Enter your simple equation: ");
+}
+
+rl.close();
